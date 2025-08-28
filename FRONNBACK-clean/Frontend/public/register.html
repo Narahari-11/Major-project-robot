@@ -1,90 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f9f9f9;
-        }
-        .register-container {
-            width: 300px;
-            padding: 20px;
-            background: white;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-        }
-        h2 {
-            text-align: center;
-        }
-        input {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        button {
-            width: 100%;
-            padding: 10px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 4px;
-        }
-        button:hover {
-            background-color: #218838;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Registration</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    button {
+      background: #4CAF50;
+      color: #fff;
+      cursor: pointer;
+      border: none;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    p {
+      text-align: center;
+    }
+    a {
+      color: #4CAF50;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
-    <div class="register-container">
-        <h2>Sign Up</h2>
-        <form id="registerForm">
-            <input type="text" id="name" name="name" placeholder="Full Name" required>
-            <input type="email" id="email" name="email" placeholder="Email" required>
-            <input type="password" id="password" name="password" placeholder="Password" required>
-            <button type="submit">Sign Up</button>
-        </form>
-    </div>
+  <div class="container">
+    <h2>User Registration</h2>
+    <form id="registerForm">
+      <label for="name">Full Name</label>
+      <input type="text" id="name" name="name" required />
 
-    <script>
-        document.getElementById('registerForm').addEventListener('submit', async function(event) {
-            event.preventDefault();
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required />
 
-            const formData = {
-                name: event.target.name.value,
-                email: event.target.email.value,
-                password: event.target.password.value
-            };
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required />
 
-            try {
-                const response = await fetch('https://e-chakra.onrender.com/register', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(formData)
-                });
+      <label for="busStop">Current Bus Stop</label>
+      <select id="busStop" name="busStop" required>
+        <option value="">-- Select Bus Stop --</option>
+        <option value="BEMCO">BEMCO</option>
+        <option value="Railway Station">Railway Station</option>
+        <option value="Bus Stand">Bus Stand</option>
+        <option value="College">College</option>
+        <option value="Market">Market</option>
+      </select>
 
-                if (response.ok) {
-                    alert('Registration successful!');
-                    window.location.href = 'map.html'; // Redirect to the map page
-                } else {
-                    const error = await response.json();
-                    alert(error.message || 'Registration failed');
-                }
-            } catch (error) {
-                alert('An error occurred while registering. Please try again later.');
-                console.error("Registration error:", error);
-            }
+      <button type="submit">Register</button>
+    </form>
+    <p>Already have an account? <a href="login.html">Login</a></p>
+  </div>
+
+  <script>
+    document.getElementById("registerForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const userData = {
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value,
+        password: document.getElementById("password").value,
+        busStop: document.getElementById("busStop").value,
+      };
+
+      try {
+        const response = await fetch("http://localhost:3000/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(userData),
         });
-    </script>
+
+        const result = await response.json();
+        alert(result.message);
+
+        if (response.ok) {
+          window.location.href = "login.html"; // redirect to login
+        }
+      } catch (err) {
+        alert("Error: " + err.message);
+      }
+    });
+  </script>
 </body>
 </html>
